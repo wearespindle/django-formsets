@@ -1,14 +1,35 @@
 {
-  "name": "jquery.formset",
-  "version": "1.3.0",
-  "devDependencies": {
-    "grunt": "~0.4.0",
-    "grunt-contrib-jshint": "~0.1.1",
-    "grunt-contrib-uglify": "~0.5.0",
-    "grunt-contrib-qunit": "~0.2.0"
+  "name": "django-formset",
+  "description": "A jQuery plugin that allows you dynamically add new forms to a rendered django formset.",
+  "version": "0.1.0",
+  "license": "MIT",
+  "homepage": "https://github.com/wearespindle/django-formset",
+  "author": {
+    "name": "Spindle",
+    "url": "https://wearespindle.com"
   },
-  "license": "BSD",
-  "engines": {
-    "node": ">=0.10"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wearespindle/django-formset"
+  },
+  "bugs": {
+    "url": "https://github.com/wearespindle/django-formset/issues"
+  },
+  "keywords": [
+    "form",
+    "tabs",
+    "widgets"
+  ],
+  "files": [
+    "dist/django-formset.js",
+  ],
+  "main": "dist/django-formset.js",
+  "scripts": {
+    "compile": "babel --presets es2015 -d dist/ src/",
+    "prepublish": "npm run compile"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.10.1",
+    "babel-preset-es2015": "^6.9.0"
   }
 }
