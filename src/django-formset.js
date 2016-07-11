@@ -40,6 +40,8 @@ $.fn.formset = function(opts) {
             // this form from the DOM, we'll mark it as deleted and hide
             // it, then let Django handle the deleting:
             del.val('on');
+            let formCount = parseInt($(`#id_${options.prefix}-TOTAL_FORMS`).val(), 10);
+            $('#id_' + options.prefix + '-TOTAL_FORMS').val(formCount - 1);
             row.hide();
         } else {
             row.remove();
@@ -85,10 +87,9 @@ $.fn.formset = function(opts) {
             // last child element of the form's container:
             row.prepend(`<a class="${options.deleteCssClass}" href="javascript:void(0)" tabindex="-1">${options.deleteText}</a>`);
         }
-        row.find('a.' + options.deleteCssClass).click(function() {
-            let _row = $(this).parents('.' + options.formCssClass);
-            let del = row.find('input:hidden[id $= "-DELETE"]');
-
+        row.find(`a.${options.deleteCssClass}`).click(function(e) {
+            let _row = $(this).closest(`.${options.formCssClass}`);
+            let del = _row.find('input:hidden[id $= "-DELETE"]');
 
             // If a pre-delete callback was provided, call it with the row and all forms:
             // To prevent deletion return false
