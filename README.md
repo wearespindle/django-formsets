@@ -12,4 +12,4 @@ using Javascript. This fork adds:
 
 installation
 ============
-    npm install django-formsets@latest
+    npm install django-formset@latest
