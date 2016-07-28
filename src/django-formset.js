@@ -40,8 +40,6 @@ $.fn.formset = function(opts) {
             // this form from the DOM, we'll mark it as deleted and hide
             // it, then let Django handle the deleting:
             del.val('on');
-            let formCount = parseInt($(`#id_${options.prefix}-TOTAL_FORMS`).val(), 10);
-            $('#id_' + options.prefix + '-TOTAL_FORMS').val(formCount - 1);
             row.hide();
         } else {
             row.remove();
@@ -73,37 +71,6 @@ $.fn.formset = function(opts) {
     };
 
 
-    let insertDeleteLink = function(row) {
-        if (row.is('TR')) {
-            // If the forms are laid out in table rows, insert
-            // the remove button into the last table cell:
-            row.children(':last').append(`<a class="${options.deleteCssClass}" href="javascript:void(0)" tabindex="-1">${options.deleteText}</a>`);
-        } else if (row.is('UL') || row.is('OL')) {
-            // If they're laid out as an ordered/unordered list,
-            // insert an <li> after the last list item:
-            row.append(`<li><a class="${options.deleteCssClass}" href="javascript:void(0)" tabindex="-1">${options.deleteText}</a></li>`);
-        } else {
-            // Otherwise, just insert the remove button as the
-            // last child element of the form's container:
-            row.prepend(`<a class="${options.deleteCssClass}" href="javascript:void(0)" tabindex="-1">${options.deleteText}</a>`);
-        }
-        row.find(`a.${options.deleteCssClass}`).click(function(e) {
-            let _row = $(this).closest(`.${options.formCssClass}`);
-            let del = _row.find('input:hidden[id $= "-DELETE"]');
-
-            // If a pre-delete callback was provided, call it with the row and all forms:
-            // To prevent deletion return false
-            if (options.beforeDelete) {
-                if (options.beforeDelete(del, _row, $('.' + options.formCssClass).not('.formset-custom-template'))) {
-                    deleteRow(del, _row);
-                }
-            } else {
-                deleteRow(del, _row);
-            }
-            return false;
-        });
-    };
-
     $$.each(function(i) {
         let row = $(this);
         let del = row.find('input:checkbox[id $= "-DELETE"]');
@@ -115,7 +82,22 @@ $.fn.formset = function(opts) {
             del.remove();
         }
         if (hasChildElements(row)) {
-            insertDeleteLink(row);
+            row.find(`a.${options.deleteCssClass}`).click(function(e) {
+                let _row = $(this).closest(`.${options.formCssClass}`);
+                let _del = _row.find('input:hidden[id $= "-DELETE"]');
+
+                // If a pre-delete callback was provided, call it with the row and all forms:
+                // To prevent deletion return false
+                if (options.beforeDelete) {
+                    if (options.beforeDelete(_del, _row, $('.' + options.formCssClass).not('.formset-custom-template'))) {
+                        deleteRow(_del, _row);
+                    }
+                } else {
+                    deleteRow(_del, _row);
+                }
+                return false;
+            });
+
             row.addClass(options.formCssClass);
             applyExtraClasses(row, i);
         }
@@ -123,31 +105,21 @@ $.fn.formset = function(opts) {
 
     if ($$.length) {
         let addButton, template;
-        if (options.formTemplate) {
-            // If a form template was specified, we'll clone it to generate new form instances:
-            template = (options.formTemplate instanceof $) ? options.formTemplate : $(options.formTemplate);
-            template.removeAttr('id').addClass(options.formCssClass).addClass('formset-custom-template');
-            template.find('input,select,textarea,label').each(function() {
-                updateElementIndex($(this), options.prefix, 2012);
-            });
-            insertDeleteLink(template);
-        } else {
-            // Otherwise, use the last form in the formset; this works much better if you've got
-            // extra (>= 1) forms (thnaks to justhamade for pointing this out):
-            template = $(`.${options.formCssClass}:last`).clone(true).removeAttr('id');
-            template.find('input:hidden[id $= "-DELETE"]').remove();
-            template.find('input,select,textarea,label').each(function() {
-                var elem = $(this);
-                // If this is a checkbox or radiobutton, uncheck it.
-                // This fixes Issue 1, reported by Wilson.Andrew.J:
-                if (elem.is('input:checkbox') || elem.is('input:radio')) {
-                    elem.attr('checked', false);
-                } else {
-                    elem.val('');
-                }
-            });
-        }
-        // FIXME: Perhaps using $.data would be a better idea?
+        // Otherwise, use the last form in the formset; this works much better if you've got
+        // extra (>= 1) forms (thnaks to justhamade for pointing this out):
+        template = $(`.${options.formCssClass}:last`).clone(true).removeAttr('id');
+        template.find('input:hidden[id $= "-DELETE"]').remove();
+        template.find('input,select,textarea,label').each(function() {
+            var elem = $(this);
+            // If this is a checkbox or radiobutton, uncheck it.
+            // This fixes Issue 1, reported by Wilson.Andrew.J:
+            if (elem.is('input:checkbox') || elem.is('input:radio')) {
+                elem.attr('checked', false);
+            } else {
+                elem.val('');
+            }
+        });
+
         options.formTemplate = template;
 
         if ($$.prop('tagName') === 'TR') {
@@ -168,7 +140,6 @@ $.fn.formset = function(opts) {
             let row = options.formTemplate.clone(true).removeClass('formset-custom-template');
             let buttonRow = $(this).parents('tr.' + options.formCssClass + '-add').get(0) || this;
             let forms = $('.' + options.formCssClass).not('.formset-custom-template');
-
             // If a pre-add callback was provided, call it with the row and all forms:
             // To prevent adding return false
             if (options.beforeAdd) {
@@ -189,8 +160,8 @@ $.fn.formset = function(opts) {
 $.fn.formset.defaults = {
     prefix: 'form',                  // The form prefix for your django formset
     formTemplate: null,              // The jQuery selection cloned to generate new form instances
-    addText: 'add another',          // Text for the add link
-    deleteText: 'remove',            // Text for the delete link
+    addText: '<i class="icon-plus-sign icon-large"></i>',
+    deleteText: '<i class="icon-remove-sign icon-large"></i>',
     addCssClass: 'add-row',          // CSS class applied to the add link
     deleteCssClass: 'delete-row',    // CSS class applied to the delete link
     formCssClass: 'dynamic-form',    // CSS class applied to each form in a formset
