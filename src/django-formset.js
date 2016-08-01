@@ -102,7 +102,7 @@ class Formset {
             let numCols = this.selector.eq(0).children().length;
             this.selector.parent().append(`<tr><td class="django-formset-add td" colspan="${numCols}"><a class="${this.options.addCssClass}" href="javascript:void(0)">${this.options.addText}</a></tr>`);
             addButton = this.selector.parent().find('tr:last a');
-            addButton.parents('tr').addClass(options.formCssClass + '-add');
+            addButton.parents('tr').addClass(`${this.options.formCssClass}-add`);
         } else {
             // Otherwise, insert it immediately after the last form in a div.
             this.selector.filter(':last').after(`<div class="django-formset-add div"><a class="${this.options.addCssClass}" href="javascript:void(0)">${this.options.addText}</a></div>`);
