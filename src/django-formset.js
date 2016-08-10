@@ -73,6 +73,7 @@ class Formset {
     cloneFormset() {
         let template = $(`.${this.options.formCssClass}:last`).clone(true).removeAttr('id');
         template.find('input:hidden[id $= "-DELETE"]').remove();
+        template.find(`.${this.options.errorCssClass}`).remove();
         template.find('input,select,textarea,label').each(function(i, el) {
             // If this is a checkbox or radiobutton, uncheck it.
             // This fixes Issue 1, reported by Wilson.Andrew.J:
@@ -190,7 +191,7 @@ class Formset {
             for (let i = 0, formCount = forms.length; i < formCount; i++) {
                 this.applyExtraClasses(forms.eq(i), i);
                 forms.eq(i).find('input,select,textarea,label').each((_i, el) => {
-                    this.updateElementIndex($(el), this.options.prefix, _i);
+                    this.updateElementIndex($(el), this.options.prefix, i);
                 });
             }
         }
@@ -218,5 +219,6 @@ $.fn.formset.defaults = {
     beforeAdd: null,                 // Function called each time before a new form is added
     beforeDelete: null,              // Function called each time before a form is deleted
     added: null,                     // Function called each time a new form is added
-    deleted: null,                    // Function called each time a form is deleted
+    deleted: null,                   // Function called each time a form is deleted
+    errorCssClass: 'errorlist',     // CSS class that will be ignored when cloning formTemplate
 };
