@@ -1,7 +1,7 @@
 {
   "name": "django-formset",
   "description": "A jQuery plugin that allows you dynamically add new forms to a rendered django formset.",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "license": "MIT",
   "homepage": "https://github.com/wearespindle/django-formset",
   "author": {
