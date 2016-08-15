@@ -97,8 +97,10 @@ class Formset {
             this.disableFirstDeleteLink();
         }
 
-
-        if (this.selector.prop('tagName') === 'TR') {
+        if (this.options.addLinkPlacement) {
+            this.selector.find(this.options.addLinkPlacement).append(`<a class="${this.options.addCssClass}" href="javascript:void(0)">${this.options.addText}</a>`);
+            addButton = this.selector.find(this.options.addLinkPlacement).find(`.${this.options.addCssClass}`);
+        } else if (this.selector.prop('tagName') === 'TR') {
             // Insert the `add` button in a new table row if forms are laid out as table rows.
             let numCols = this.selector.eq(0).children().length;
             this.selector.parent().append(`<tr><td class="django-formset-add td" colspan="${numCols}"><a class="${this.options.addCssClass}" href="javascript:void(0)">${this.options.addText}</a></tr>`);
@@ -212,6 +214,7 @@ $.fn.formset.defaults = {
     formTemplate: null,              // The jQuery selection cloned to generate new form instances
     addText: '<i class="icon-plus-sign icon-large"></i>',
     deleteText: '<i class="icon-remove-sign icon-large"></i>',
+    addLinkPlacement: null,          // Element class/id where the add link will be appended to
     addCssClass: 'add-row',          // CSS class applied to the add link
     deleteCssClass: 'delete-row',    // CSS class applied to the delete link
     formCssClass: 'dynamic-form',    // CSS class applied to each form in a formset
