@@ -73,10 +73,10 @@ class Formset {
     cloneFormset() {
         let template = $(`.${this.options.formCssClass}:last`).clone(true).removeAttr('id');
         template.find('input:hidden[id $= "-DELETE"]').remove();
-        template.find(`.${this.options.errorCssClass}`).remove();
+        template.find(`.${this.options.errorMessageClass}`).remove();
+        template.find(`.${this.options.formfieldClass}`).removeClass(this.options.formfieldErrorClass);
         template.find('input,select,textarea,label').each(function(i, el) {
             // If this is a checkbox or radiobutton, uncheck it.
-            // This fixes Issue 1, reported by Wilson.Andrew.J:
             if ($(el).is('input:checkbox') || $(el).is('input:radio')) {
                 $(el).attr('checked', false);
             } else {
@@ -208,17 +208,19 @@ $.fn.formset = function(opts) {
 
 /* Setup plugin defaults */
 $.fn.formset.defaults = {
-    prefix: 'form',                  // The form prefix for your django formset
-    formTemplate: null,              // The jQuery selection cloned to generate new form instances
+    prefix: 'form',                     // The form prefix for your django formset.
+    formTemplate: null,                 // The jQuery selection cloned to generate new form instances.
     addText: '<i class="icon-plus-sign icon-large"></i>',
     deleteText: '<i class="icon-remove-sign icon-large"></i>',
-    addCssClass: 'add-row',          // CSS class applied to the add link
-    deleteCssClass: 'delete-row',    // CSS class applied to the delete link
-    formCssClass: 'dynamic-form',    // CSS class applied to each form in a formset
-    extraClasses: [],                // Additional CSS classes, which will be applied to each form in turn
-    beforeAdd: null,                 // Function called each time before a new form is added
-    beforeDelete: null,              // Function called each time before a form is deleted
-    added: null,                     // Function called each time a new form is added
-    deleted: null,                   // Function called each time a form is deleted
-    errorCssClass: 'errorlist',     // CSS class that will be ignored when cloning formTemplate
+    addCssClass: 'add-row',             // CSS class applied to the add link.
+    deleteCssClass: 'delete-row',       // CSS class applied to the delete link.
+    formCssClass: 'dynamic-form',       // CSS class applied to each form in a formset.
+    extraClasses: [],                   // Additional CSS classes, which will be applied to each form in turn.
+    beforeAdd: null,                    // Function called each time before a new form is added.
+    beforeDelete: null,                 // Function called each time before a form is deleted.
+    added: null,                        // Function called each time a new form is added.
+    deleted: null,                      // Function called each time a form is deleted.
+    errorMessageClass: 'errorlist',     // Error message form element that will be removed when cloning a formset.
+    formfieldClass: 'formfield-group',  // The formfield container.
+    formfieldErrorClass: 'error'        // The error class set on the formfield container.
 };
