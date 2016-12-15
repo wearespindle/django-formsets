@@ -145,9 +145,9 @@
         if ($$.length) {
             var hideAddButton = !showAddButton(),
                 addButton, template;
-            if (options.formTemplate) {
+            if (options.formsetClone) {
                 // If a form template was specified, we'll clone it to generate new form instances:
-                template = (options.formTemplate instanceof $) ? options.formTemplate : $(options.formTemplate);
+                template = (options.formsetClone instanceof $) ? options.formsetClone : $(options.formsetClone);
                 template.removeAttr('id').addClass(options.formCssClass + ' formset-custom-template');
                 template.find(childElementSelector).each(function() {
                     updateElementIndex($(this), options.prefix, '__prefix__');
@@ -171,7 +171,7 @@
                 });
             }
             // FIXME: Perhaps using $.data would be a better idea?
-            options.formTemplate = template;
+            options.formsetClone = template;
 
             if ($$.is('TR')) {
                 // If forms are laid out as table rows, insert the
@@ -190,7 +190,7 @@
             }
             addButton.click(function() {
                 var formCount = parseInt(totalForms.val()),
-                    row = options.formTemplate.clone(true).removeClass('formset-custom-template'),
+                    row = options.formsetClone.clone(true).removeClass('formset-custom-template'),
                     buttonRow = $($(this).parents('tr.' + options.formCssClass + '-add').get(0) || this)
                     delCssSelector = options.deleteCssClass.trim().replace(/\s+/g, '.');
                 applyExtraClasses(row, formCount);
@@ -217,7 +217,7 @@
     /* Setup plugin defaults */
     $.fn.formset.defaults = {
         prefix: 'form',                  // The form prefix for your django formset
-        formTemplate: null,              // The jQuery selection cloned to generate new form instances
+        formsetClone: null,              // The jQuery selection cloned to generate new form instances
         addText: 'add another',          // Text for the add link
         deleteText: 'remove',            // Text for the delete link
         addCssClass: 'add-row',          // CSS class applied to the add link
