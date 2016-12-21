@@ -1,0 +1,38 @@
+{
+    "tags": {
+        "allowUnknownTags": true,
+        "dictionaries": ["jsdoc"]
+    },
+    "source": {
+        "include": ["src/django-formset.js"],
+        "includePattern": ".js$"
+    },
+    "plugins": [
+        "plugins/markdown"
+    ],
+    "templates" : {
+        "cleverLinks": false,
+        "monospaceLinks": false,
+        "dateFormat": "ddd MMM Do YYYY",
+        "outputSourceFiles": true,
+        "outputSourcePath": true,
+        "systemName": "Django-formset",
+        "footer": "",
+        "navType": "vertical",
+        "theme": "simplex",
+        "linenums": true,
+        "collapseSymbols": false,
+        "inverseNav": true,
+        "useLongnameInNav": false,
+        "default": {
+
+        }
+    },
+    "opts": {
+        "destination": "./docs/",
+        "encoding": "utf8",
+        "private": true,
+        "recurse": true,
+        "template": "./node_modules/ink-docstrap/template"
+    }
+}
