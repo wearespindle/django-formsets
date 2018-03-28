@@ -264,7 +264,7 @@ class Formset {
         let deleteInput = formsetElement.find('input:checkbox[id $= "-DELETE"]');
         // Replace default formset checkboxes with hidden fields.
         if (deleteInput.length) {
-            deleteInput.before(`<input type="hidden" name="${deleteInput.attr('name')}" id="${deleteInput.attr('id')}" />`);
+            deleteInput.before(`<input type="hidden" name="${deleteInput.attr('name')}" id="${deleteInput.attr('id')}" + ` +  (deleteInput.is(':checked') ? ' value="on"' : '') + "/>");
             deleteInput.remove();
         }
     }
