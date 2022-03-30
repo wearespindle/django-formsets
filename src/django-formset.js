@@ -183,7 +183,7 @@ class Formset {
         }
 
         // Finally add the event handler.
-        addButton.click((e) => {
+        addButton.on('click', (e) => {
             let formsetCount = parseInt($(`#id_${this.options.prefix}-TOTAL_FORMS`).val(), 10);
             let newFormset = this.cloneFormset().clone(true);
             // Why don't we just use `e.currentTarget` here.
@@ -223,7 +223,7 @@ class Formset {
             this.replaceCheckboxes(formsetElement);
             if (this.hasChildElements(formsetElement)) {
                 // Add click events to the delete buttons.
-                formsetElement.find(`a.${this.options.deleteCssClass}`).click((e) => {
+                formsetElement.find(`a.${this.options.deleteCssClass}`).on('click', (e) => {
                     // The current formset; e.g. the closest formset to the
                     // clicked delete button.
                     let closestFormset = $(e.currentTarget).closest(`.${this.options.formCssClass}`);
